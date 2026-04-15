@@ -1,0 +1,48 @@
+{
+  "name": "@modelux/sdk",
+  "version": "0.1.0",
+  "description": "Modelux SDK — LLM proxy with intelligent routing, budgets, caching, and observability",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": ["dist"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/modelux/modelux-node.git"
+  },
+  "homepage": "https://docs.modelux.ai",
+  "bugs": "https://github.com/modelux/modelux-node/issues",
+  "keywords": ["modelux", "llm", "openai", "anthropic", "google", "proxy", "routing", "ai"],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "openai": ">=4.0.0"
+  },
+  "devDependencies": {
+    "openai": "^4.86.2",
+    "tsup": "^8.4.0",
+    "typescript": "^5.7.3",
+    "vitest": "^3.1.1"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}
