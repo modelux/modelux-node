@@ -1,45 +1,34 @@
 /**
- * Integration tests — hit the running Modelux proxy.
+ * Integration tests — hit a real Modelux proxy.
  *
- * Requires:
- *   - Proxy running on localhost:8080 (./dev/start)
- *   - DASHBOARD_AI_API_KEY set in .env
+ * Required env vars:
+ *   - MODELUX_API_KEY    Modelux API key (e.g. mlx_sk_...)
+ *   - MODELUX_INTEGRATION=1   set to enable these tests
+ *
+ * Optional:
+ *   - MODELUX_BASE_URL   defaults to https://api.modelux.ai/v1
+ *   - MODELUX_MODEL      defaults to "@default"
  *
  * Run:
- *   MODELUX_INTEGRATION=1 npx vitest run tests/integration.test.ts
+ *   MODELUX_INTEGRATION=1 MODELUX_API_KEY=mlx_sk_... npx vitest run tests/integration.test.ts
  */
 
 import { describe, test, expect, beforeAll } from "vitest";
 import { Modelux } from "../src/index";
-import * as fs from "fs";
-import * as path from "path";
 
 const SKIP = !process.env.MODELUX_INTEGRATION;
-
-function loadEnv(): Record<string, string> {
-  const envPath = path.resolve(__dirname, "../../../.env");
-  if (!fs.existsSync(envPath)) return {};
-  const lines = fs.readFileSync(envPath, "utf-8").split("\n");
-  const env: Record<string, string> = {};
-  for (const line of lines) {
-    const match = line.match(/^([A-Z_]+)=(.*)$/);
-    if (match) env[match[1]] = match[2];
-  }
-  return env;
-}
 
 describe.skipIf(SKIP)("integration", () => {
   let client: Modelux;
   let model: string;
 
   beforeAll(() => {
-    const env = loadEnv();
-    const apiKey = env.DASHBOARD_AI_API_KEY;
-    model = env.DASHBOARD_AI_MODEL || "@default";
-    if (!apiKey) throw new Error("DASHBOARD_AI_API_KEY not set in .env");
+    const apiKey = process.env.MODELUX_API_KEY;
+    model = process.env.MODELUX_MODEL || "@default";
+    if (!apiKey) throw new Error("MODELUX_API_KEY not set");
     client = new Modelux({
       apiKey,
-      baseURL: "http://localhost:8080/v1",
+      baseURL: process.env.MODELUX_BASE_URL || "https://api.modelux.ai/v1",
     });
   });
 
@@ -111,7 +100,7 @@ describe.skipIf(SKIP)("integration", () => {
   test("invalid API key returns auth error", async () => {
     const badClient = new Modelux({
       apiKey: "mlx_sk_invalid",
-      baseURL: "http://localhost:8080/v1",
+      baseURL: process.env.MODELUX_BASE_URL || "https://api.modelux.ai/v1",
     });
 
     await expect(
