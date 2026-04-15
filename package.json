@@ -23,7 +23,7 @@
     "type": "git",
     "url": "git+https://github.com/modelux/modelux-node.git"
   },
-  "homepage": "https://docs.modelux.ai",
+  "homepage": "https://modelux.ai/docs",
   "bugs": "https://github.com/modelux/modelux-node/issues",
   "keywords": ["modelux", "llm", "openai", "anthropic", "google", "proxy", "routing", "ai"],
   "scripts": {
